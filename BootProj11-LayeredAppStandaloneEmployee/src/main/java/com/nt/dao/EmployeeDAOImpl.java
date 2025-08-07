@@ -1,0 +1,60 @@
+package com.nt.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.nt.model.Employee;
+
+@Repository("dao")
+public class EmployeeDAOImpl implements IEmployeeDAO {
+
+	//DataSource object
+	@Autowired
+	private DataSource ds;
+	
+	// PREPARED STATEMENT (ALWASY PRIVATE CONSTANT)
+	private static final String GET_EMP_BY_DESG ="SELECT EMPNO , ENAME ,JOB,SAL FROM EMP WHERE JOB IN(?,?,?) ORDER BY JOB ";
+	
+	@Override
+	public List<Employee> getEmployeeByDesgs(String desg1, String desg2, String desg3) throws Exception {
+			System.out.println("EmployeeDAOImpl.getEmployeeByDesgs()");
+			List<Employee> list = new ArrayList<Employee>();
+			try(
+					
+					// get connection object
+					Connection con = ds.getConnection();
+					
+					// get prepared stmt object
+					PreparedStatement ps = con.prepareStatement(GET_EMP_BY_DESG);
+					){
+				
+				ps.setString(1, desg1);
+				ps.setString(2, desg2);
+				ps.setString(3, desg3);
+				try(ResultSet rs = ps.executeQuery()){
+					
+					while(rs.next()) {
+						Employee emp = new Employee();
+						emp.setEid(rs.getInt(1));
+						emp.setEname(rs.getString(2));
+						emp.setJob(rs.getString(3));
+						emp.setSalary(rs.getDouble(4));
+						list.add(emp);
+					}
+				}
+				
+			}catch(Exception e) {
+				throw e;
+			}
+		return list;
+	}
+
+}
