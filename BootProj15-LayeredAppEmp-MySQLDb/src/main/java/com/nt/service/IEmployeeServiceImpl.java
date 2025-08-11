@@ -3,6 +3,7 @@ package com.nt.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.nt.dao.IEmployeeDAO;
@@ -14,6 +15,7 @@ public class IEmployeeServiceImpl implements IEmployeeService {
 	
 	// dao interface reference variable
 	@Autowired
+	@Qualifier("MySqldao")
 	private IEmployeeDAO dao ;
 	@Override
 	public List<Employee> fetchAllEmployeeDesg(String desg1, String desg2, String desg3) throws Exception {

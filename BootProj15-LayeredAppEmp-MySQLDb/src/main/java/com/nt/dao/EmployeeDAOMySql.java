@@ -13,16 +13,16 @@ import org.springframework.stereotype.Repository;
 
 import com.nt.model.Employee;
 
-@Repository("dao")
-public class EmployeeDAOImpl implements IEmployeeDAO {
+@Repository("MySqldao")
+public class EmployeeDAOMySql implements IEmployeeDAO {
 
 	//DataSource object
 	@Autowired
 	private DataSource ds;
 	
 	// PREPARED STATEMENT (ALWASY PRIVATE CONSTANT)
-	private static final String GET_EMP_BY_DESG ="SELECT EMPNO , ENAME ,JOB,SAL FROM EMP WHERE JOB IN(?,?,?) ORDER BY JOB ";
-	private static final String INSERT_EMP_DATA = "INSERT INTO EMP(EMPNO , ENAME , JOB , SAL) VALUES(emp_seq.nextval ,?,?,?)";
+	private static final String GET_EMP_BY_DESG ="SELECT EMPNO , ENAME ,JOB,SALARY FROM EMP WHERE JOB IN(?,?,?) ORDER BY JOB ";
+	private static final String INSERT_EMP_DATA = "INSERT INTO EMP(ENAME , JOB , SALARY) VALUES(?,?,?)";
 	
 	@Override
 	public List<Employee> getEmployeeByDesgs(String desg1, String desg2, String desg3) throws Exception {
